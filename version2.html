@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sophie Pellegrin · Sophrologue — Version 2 : Lumière & Modernité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --plum:#5C4E8A;--plum-light:#8B7EC8;--plum-dark:#3A3060;
+  --blush:#F2E8EC;--rose:#E8D0D8;--warm-white:#FEFCFD;
+  --charcoal:#2A2535;--mid:#6B6278;--light:#A8A0B0;
+  --accent:#D4A0B0;--gold:#C49A6C
+}
+html{scroll-behavior:smooth}
+body{font-family:'Raleway',sans-serif;background:var(--warm-white);color:var(--charcoal);line-height:1.7}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;transition:all .4s}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 6vw;transition:all .4s}
+nav.scrolled .nav-inner{background:rgba(254,252,253,.96);backdrop-filter:blur(16px);box-shadow:0 1px 0 rgba(92,78,138,.08),0 8px 30px rgba(92,78,138,.06);padding:1rem 6vw}
+.nav-logo{font-family:'Lora',serif;font-size:1.2rem;color:var(--charcoal);text-decoration:none;letter-spacing:.04em}
+.nav-logo span{color:var(--plum)}
+.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+.nav-links a{color:var(--mid);text-decoration:none;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;transition:color .3s}
+.nav-links a:hover{color:var(--plum)}
+.nav-btn{padding:.65rem 1.8rem;background:var(--plum);color:#fff !important;border-radius:30px;transition:all .3s !important}
+.nav-btn:hover{background:var(--plum-dark) !important;transform:translateY(-2px);box-shadow:0 8px 20px rgba(92,78,138,.3)}
+
+/* HERO — split layout */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.hero-left{background:var(--plum-dark);display:flex;flex-direction:column;justify-content:center;padding:12rem 6vw 6rem calc(6vw + 20px);position:relative;overflow:hidden}
+.hero-left::before{content:'';position:absolute;top:-20%;left:-20%;width:80%;height:80%;border-radius:50%;background:radial-gradient(circle,rgba(139,126,200,.3) 0%,transparent 65%)}
+.hero-left::after{content:'';position:absolute;bottom:-10%;right:-10%;width:50%;height:50%;border-radius:50%;border:1px solid rgba(212,160,176,.2)}
+.hero-tag{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;position:relative;z-index:1}
+.hero h1{font-family:'Lora',serif;font-size:clamp(2.8rem,4.5vw,4.5rem);font-weight:400;color:#fff;line-height:1.15;margin-bottom:1.5rem;position:relative;z-index:1}
+.hero h1 span{font-style:italic;color:var(--rose)}
+.hero-desc{font-size:1rem;color:rgba(255,255,255,.65);line-height:1.9;max-width:420px;margin-bottom:3rem;font-weight:300;position:relative;z-index:1}
+.hero-actions{display:flex;align-items:center;gap:2rem;position:relative;z-index:1}
+.btn-plum{display:inline-block;padding:1rem 2.5rem;background:#fff;color:var(--plum-dark);text-decoration:none;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;border-radius:30px;transition:all .3s}
+.btn-plum:hover{background:var(--rose);transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.15)}
+.btn-link{font-size:.85rem;color:rgba(255,255,255,.6);text-decoration:none;letter-spacing:.05em;transition:color .3s;font-weight:300}
+.btn-link:hover{color:#fff}
+.btn-link::after{content:'→';margin-left:.5rem}
+
+.hero-right{background:var(--blush);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-right img{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:.6}
+.hero-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(242,232,236,.3) 0%,rgba(92,78,138,.15) 100%)}
+.hero-badge{position:absolute;bottom:4rem;left:4rem;background:#fff;padding:2rem 2.5rem;border-radius:4px;box-shadow:0 20px 60px rgba(92,78,138,.15)}
+.badge-title{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--plum);margin-bottom:.8rem}
+.badge-services{display:flex;flex-direction:column;gap:.4rem}
+.badge-services span{font-size:.88rem;color:var(--charcoal);display:flex;align-items:center;gap:.6rem}
+.badge-services span::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--plum-light);flex-shrink:0}
+.hero-geo{position:absolute;top:3rem;right:3rem}
+.geo-circle{width:120px;height:120px;border:1px solid rgba(92,78,138,.2);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.geo-inner{width:80px;height:80px;border:1px solid rgba(92,78,138,.3);border-radius:50%;background:rgba(92,78,138,.05)}
+
+/* STATS BAR */
+.stats-bar{background:#fff;padding:3rem 6vw;display:flex;justify-content:space-around;border-bottom:1px solid var(--blush)}
+.stat{text-align:center}
+.stat-n{font-family:'Lora',serif;font-size:2.8rem;font-weight:400;color:var(--plum)}
+.stat-l{font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--light);margin-top:.3rem}
+
+/* INTRO */
+.intro{padding:7rem 6vw;background:var(--warm-white);display:grid;grid-template-columns:1.1fr 1fr;gap:7rem;align-items:center}
+.section-label{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--plum-light);margin-bottom:1.5rem}
+h2{font-family:'Lora',serif;font-size:clamp(1.9rem,3vw,2.8rem);font-weight:400;color:var(--charcoal);line-height:1.25;margin-bottom:1.5rem}
+h2 em,h2 span{font-style:italic;color:var(--plum)}
+.intro-text p{color:var(--mid);margin-bottom:1.2rem;font-size:1rem;line-height:1.9;font-weight:300}
+.pill-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem}
+.pill{padding:.45rem 1.2rem;background:var(--blush);border-radius:30px;font-size:.82rem;color:var(--plum);font-weight:600}
+.intro-visual{position:relative}
+.intro-img-wrap{border-radius:8px;overflow:hidden;aspect-ratio:4/5}
+.intro-img-wrap img{width:100%;height:100%;object-fit:cover}
+.intro-quote-card{position:absolute;bottom:-2rem;left:-2rem;background:var(--plum);color:#fff;padding:2rem;border-radius:4px;max-width:260px;box-shadow:0 20px 50px rgba(92,78,138,.3)}
+.intro-quote-card p{font-family:'Lora',serif;font-style:italic;font-size:.95rem;line-height:1.6}
+.intro-quote-card span{display:block;margin-top:1rem;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;opacity:.7}
+
+/* SERVICES */
+.services{padding:7rem 6vw;background:var(--blush)}
+.services-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.srv-card{background:#fff;border-radius:6px;padding:2.5rem;position:relative;overflow:hidden;transition:all .4s;border:1px solid transparent}
+.srv-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(92,78,138,.04) 0%,transparent 100%)}
+.srv-card:hover{border-color:rgba(139,126,200,.3);transform:translateY(-5px);box-shadow:0 20px 50px rgba(92,78,138,.12)}
+.srv-icon{width:48px;height:48px;background:var(--blush);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
+.srv-icon svg{width:22px;height:22px;stroke:var(--plum);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.srv-title{font-family:'Lora',serif;font-size:1.3rem;color:var(--charcoal);margin-bottom:.8rem}
+.srv-desc{font-size:.88rem;color:var(--mid);line-height:1.8;font-weight:300}
+.srv-tag{display:inline-block;margin-top:1.2rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--plum-light)}
+
+/* FORMAT */
+.format{padding:5rem 6vw;background:#fff}
+.format-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:3rem;background:var(--blush)}
+.fmt{background:#fff;padding:3rem;text-align:center}
+.fmt-icon{font-size:2.5rem;margin-bottom:1rem}
+.fmt-title{font-family:'Lora',serif;font-size:1.3rem;color:var(--charcoal);margin-bottom:.6rem}
+.fmt-desc{font-size:.88rem;color:var(--mid);font-weight:300;line-height:1.8}
+
+/* QUOTE BAND */
+.quote-band{padding:5rem 6vw;background:var(--plum);display:flex;align-items:center;gap:4rem}
+.qb-line{width:80px;height:1px;background:var(--rose);flex-shrink:0}
+.qb-text{font-family:'Lora',serif;font-size:clamp(1.3rem,2.2vw,1.9rem);font-style:italic;color:#fff;line-height:1.6}
+.qb-text strong{font-style:normal;color:var(--rose);font-weight:400}
+
+/* APPROACH */
+.approach{padding:7rem 6vw;background:var(--warm-white)}
+.approach-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;margin-top:4rem}
+.timeline{position:relative;padding-left:3rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--plum),var(--blush))}
+.t-item{position:relative;margin-bottom:3rem}
+.t-item::before{content:'';position:absolute;left:-3.3rem;top:.3rem;width:12px;height:12px;border-radius:50%;background:var(--plum-light);border:2px solid #fff;box-shadow:0 0 0 3px rgba(139,126,200,.3)}
+.t-num{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--plum-light);margin-bottom:.4rem}
+.t-item h3{font-family:'Lora',serif;font-size:1.25rem;color:var(--charcoal);margin-bottom:.5rem}
+.t-item p{font-size:.9rem;color:var(--mid);line-height:1.8;font-weight:300}
+.approach-cta{background:var(--blush);padding:3rem;border-radius:6px;margin-top:1rem}
+.approach-cta h3{font-family:'Lora',serif;font-size:1.5rem;color:var(--charcoal);margin-bottom:1rem}
+.approach-cta p{font-size:.9rem;color:var(--mid);font-weight:300;margin-bottom:1.5rem}
+.btn-full{display:block;width:100%;padding:1rem;background:var(--plum);color:#fff;text-align:center;text-decoration:none;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;border-radius:4px;transition:background .3s}
+.btn-full:hover{background:var(--plum-dark)}
+
+/* CONTACT */
+.contact{padding:7rem 6vw;background:var(--blush);display:grid;grid-template-columns:1fr 1.2fr;gap:6rem}
+.contact h2{margin-bottom:1.5rem}
+.contact>div>p{color:var(--mid);margin-bottom:2.5rem;font-size:1rem;font-weight:300}
+.c-list{display:flex;flex-direction:column;gap:1.5rem}
+.c-row{display:flex;align-items:center;gap:1.2rem}
+.c-dot{width:36px;height:36px;background:var(--plum);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-dot svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.c-info small{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--plum-light);display:block}
+.c-info span{font-size:.95rem;color:var(--charcoal)}
+.contact-form{background:#fff;padding:3rem;border-radius:8px;box-shadow:0 10px 40px rgba(92,78,138,.08)}
+.contact-form h3{font-family:'Lora',serif;font-size:1.4rem;color:var(--charcoal);margin-bottom:1.5rem}
+.field{margin-bottom:1.2rem}
+.field label{display:block;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem;font-weight:600}
+.field input,.field textarea{width:100%;padding:.9rem 1rem;border:1px solid var(--rose);background:var(--warm-white);font-family:'Raleway',sans-serif;font-size:.95rem;color:var(--charcoal);outline:none;border-radius:4px;transition:border-color .3s;font-weight:300}
+.field input:focus,.field textarea:focus{border-color:var(--plum-light)}
+.field textarea{height:110px;resize:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.submit-btn{width:100%;padding:1.1rem;background:var(--plum);color:#fff;border:none;font-family:'Raleway',sans-serif;font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;cursor:pointer;border-radius:4px;transition:all .3s;margin-top:.5rem}
+.submit-btn:hover{background:var(--plum-dark);transform:translateY(-2px);box-shadow:0 10px 25px rgba(92,78,138,.3)}
+
+/* FOOTER */
+footer{background:var(--plum-dark);padding:3rem 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+.footer-logo{font-family:'Lora',serif;font-size:1.15rem;color:#fff}
+.footer-links{display:flex;gap:2rem;list-style:none}
+.footer-links a{font-size:.78rem;color:rgba(255,255,255,.4);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .3s}
+.footer-links a:hover{color:rgba(255,255,255,.8)}
+footer p{font-size:.78rem;color:rgba(255,255,255,.3)}
+
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.delay-1{transition-delay:.15s}.delay-2{transition-delay:.3s}.delay-3{transition-delay:.45s}
+
+@media(max-width:1000px){
+  .hero{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .intro,.approach-grid,.contact{grid-template-columns:1fr;gap:3rem}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .format-grid{grid-template-columns:1fr}
+  .services-top{flex-direction:column;align-items:flex-start;gap:1rem}
+  .intro-quote-card{position:static;margin-top:2rem;max-width:100%}
+  footer{flex-direction:column;text-align:center}
+}
+@media(max-width:600px){.services-grid{grid-template-columns:1fr}.stats-bar{flex-wrap:wrap;gap:2rem}.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Sophie <span>Pellegrin</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#services">Accompagnements</a></li>
+      <li><a href="#approche">Approche</a></li>
+      <li><a href="#contact" class="nav-btn">Rendez-vous</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO SPLIT -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Sophrologue · Hypnothérapeute · Coach de vie · Mougins (06)</p>
+    <h1>Votre bien-être,<br><span>au cœur</span><br>de mon métier</h1>
+    <p class="hero-desc">Un accompagnement humain, expert et personnalisé pour traverser vos difficultés et retrouver un équilibre profond — corps, esprit et émotions.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-plum">Prendre rendez-vous</a>
+      <a href="#services" class="btn-link">Découvrir mes méthodes</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="">
+    <div class="hero-img-overlay"></div>
+    <div class="hero-badge">
+      <div class="badge-title">Spécialités</div>
+      <div class="badge-services">
+        <span>Sophrologie</span>
+        <span>Hypnose Ericksonienne</span>
+        <span>Méditation & Mindfulness</span>
+        <span>RITMO · EMDR</span>
+        <span>Coaching de vie</span>
+      </div>
+    </div>
+    <div class="hero-geo">
+      <div class="geo-circle"><div class="geo-inner"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-n">+10</div><div class="stat-l">Années d'expérience</div></div>
+  <div class="stat"><div class="stat-n">6</div><div class="stat-l">Approches thérapeutiques</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Accompagnement sur mesure</div></div>
+  <div class="stat"><div class="stat-n">2</div><div class="stat-l">Modalités · Cabinet & Visio</div></div>
+</div>
+
+<!-- ABOUT -->
+<section class="intro" id="about">
+  <div class="intro-text reveal">
+    <p class="section-label">À propos de moi</p>
+    <h2>Une thérapeute<br><em>engagée</em> pour votre santé globale</h2>
+    <p>Sophrologue, hypnothérapeute et coach de vie certifiée, j'accompagne mes patients avec une vision holistique et bienveillante. Mon approche intègre les méthodes brèves les plus efficaces, adaptées à chaque situation.</p>
+    <p>Basée à Mougins, je reçois en cabinet individuel ou en séance de groupe. Les consultations en visioconférence permettent un accompagnement sans contrainte géographique.</p>
+    <p>Mon fil conducteur : vous redonner les clés de votre équilibre pour une autonomie durable.</p>
+    <div class="pill-tags">
+      <div class="pill">Certifiée RNCP</div>
+      <div class="pill">Méthodes brèves</div>
+      <div class="pill">Approche holistique</div>
+      <div class="pill">Bienveillance</div>
+    </div>
+  </div>
+  <div class="intro-visual reveal delay-1">
+    <div class="intro-img-wrap">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80" alt="Sophie Pellegrin sophrologue">
+    </div>
+    <div class="intro-quote-card">
+      <p>Mon rôle est de vous guider vers votre propre lumière intérieure.</p>
+      <span>— Sophie Pellegrin</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-top">
+    <div>
+      <p class="section-label">Ce que je propose</p>
+      <h2>Mes <em>accompagnements</em></h2>
+    </div>
+    <a href="#contact" class="btn-plum" style="background:var(--plum);color:#fff;padding:.9rem 2rem;border-radius:30px;text-decoration:none;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;white-space:nowrap">Me contacter</a>
+  </div>
+  <div class="services-grid">
+    <div class="srv-card reveal">
+      <div class="srv-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="srv-title">Sophrologie</div>
+      <div class="srv-desc">Relaxation dynamique, visualisation positive et conscience corporelle pour gérer le stress et retrouver un équilibre de vie durable.</div>
+      <span class="srv-tag">Gestion du stress · Confiance</span>
+    </div>
+    <div class="srv-card reveal delay-1">
+      <div class="srv-icon">
+        <svg viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.24z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.24z"/></svg>
+      </div>
+      <div class="srv-title">Hypnose Ericksonienne</div>
+      <div class="srv-desc">Accès aux ressources inconscientes pour transformer en profondeur les blocages, phobies et schémas limitants.</div>
+      <span class="srv-tag">Phobies · Trauma · Confiance</span>
+    </div>
+    <div class="srv-card reveal delay-2">
+      <div class="srv-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M8 12h8"/></svg>
+      </div>
+      <div class="srv-title">Pleine Conscience</div>
+      <div class="srv-desc">Mindfulness et méditation guidée pour développer la présence au moment, réduire l'anxiété et cultiver la paix intérieure.</div>
+      <span class="srv-tag">Anxiété · Présence · Calme</span>
+    </div>
+    <div class="srv-card reveal">
+      <div class="srv-icon">
+        <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
+      </div>
+      <div class="srv-title">RITMO · EMDR</div>
+      <div class="srv-desc">Traitement des traumatismes par les mouvements oculaires bilatéraux. Une méthode scientifiquement validée.</div>
+      <span class="srv-tag">Trauma · PTSD · Cicatrisation</span>
+    </div>
+    <div class="srv-card reveal delay-1">
+      <div class="srv-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="srv-title">Coaching de Vie</div>
+      <div class="srv-desc">Accompagnement vers vos objectifs personnels et professionnels. Confiance, transitions de vie, épanouissement.</div>
+      <span class="srv-tag">Objectifs · Transitions · Projet</span>
+    </div>
+    <div class="srv-card reveal delay-2">
+      <div class="srv-icon">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div class="srv-title">Thérapies Psycho-corporelles</div>
+      <div class="srv-desc">Approches intégratives corps-esprit pour une guérison holistique et une reconnexion à soi profonde.</div>
+      <span class="srv-tag">Corps · Esprit · Harmonie</span>
+    </div>
+  </div>
+</section>
+
+<!-- FORMAT -->
+<section class="format">
+  <p class="section-label">Modalités</p>
+  <h2>Comment se déroule<br>un <em>accompagnement</em> ?</h2>
+  <div class="format-grid">
+    <div class="fmt">
+      <div class="fmt-icon">🏢</div>
+      <div class="fmt-title">En cabinet</div>
+      <div class="fmt-desc">Consultations individuelles dans un espace confidentiel et apaisant à Mougins (06).</div>
+    </div>
+    <div class="fmt">
+      <div class="fmt-icon">💻</div>
+      <div class="fmt-title">En visioconférence</div>
+      <div class="fmt-desc">Séances à distance pour un accompagnement flexible, depuis chez vous, partout en France.</div>
+    </div>
+    <div class="fmt">
+      <div class="fmt-icon">👥</div>
+      <div class="fmt-title">En groupe</div>
+      <div class="fmt-desc">Ateliers collectifs pour découvrir et pratiquer dans une dynamique de groupe bienveillante.</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE BAND -->
+<div class="quote-band">
+  <div class="qb-line"></div>
+  <p class="qb-text">Mon accompagnement repose sur une conviction : vous portez déjà en vous <strong>toutes les ressources nécessaires</strong> pour aller mieux.</p>
+  <div class="qb-line"></div>
+</div>
+
+<!-- APPROACH -->
+<section class="approach" id="approche">
+  <p class="section-label">Comment je travaille</p>
+  <h2>Un accompagnement <em>structuré</em>, toujours humain</h2>
+  <div class="approach-grid">
+    <div class="timeline reveal">
+      <div class="t-item">
+        <div class="t-num">Étape 01</div>
+        <h3>Premier rendez-vous d'écoute</h3>
+        <p>Un espace sans jugement pour explorer votre situation, comprendre vos besoins profonds et fixer des objectifs clairs ensemble.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-num">Étape 02</div>
+        <h3>Programme personnalisé</h3>
+        <p>Conception d'un plan d'accompagnement sur mesure, intégrant les méthodes les mieux adaptées à votre profil.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-num">Étape 03</div>
+        <h3>Suivi régulier et ajustement</h3>
+        <p>Séances hebdomadaires ou bimensuelles avec évaluation continue des progrès et adaptation de l'approche.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-num">Étape 04</div>
+        <h3>Autonomie et ancrage</h3>
+        <p>Transmission progressive d'outils pratiques pour que vous puissiez maintenir votre équilibre de façon autonome.</p>
+      </div>
+    </div>
+    <div class="approach-cta reveal delay-1">
+      <h3>Prêt(e) à commencer votre chemin ?</h3>
+      <p>Le premier pas est souvent le plus difficile. Je vous accueille avec bienveillance et sans jugement, là où vous en êtes.</p>
+      <a href="tel:+33662660108" class="btn-full">Appeler au 06 62 66 01 08</a>
+      <a href="#contact" class="btn-full" style="background:transparent;color:var(--plum);border:1px solid rgba(92,78,138,.3);margin-top:1rem">Envoyer un message</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <p class="section-label">Me contacter</p>
+    <h2>Discutons de<br>votre <em>situation</em></h2>
+    <p>Que vous ayez une question ou souhaitiez prendre rendez-vous, n'hésitez pas à me contacter. Je vous réponds rapidement.</p>
+    <div class="c-list">
+      <div class="c-row">
+        <div class="c-dot"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div class="c-info"><small>Téléphone</small><span>06 62 66 01 08</span></div>
+      </div>
+      <div class="c-row">
+        <div class="c-dot"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="c-info"><small>Cabinet</small><span>Mougins (06) · Consultations en visio</span></div>
+      </div>
+      <div class="c-row">
+        <div class="c-dot"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="c-info"><small>Disponibilités</small><span>Lundi – Vendredi, sur rendez-vous</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-form reveal delay-1">
+    <h3>Envoyez-moi un message</h3>
+    <form onsubmit="return false">
+      <div class="form-row">
+        <div class="field"><label>Prénom</label><input type="text" placeholder="Marie"></div>
+        <div class="field"><label>Nom</label><input type="text" placeholder="Dupont"></div>
+      </div>
+      <div class="field"><label>Email</label><input type="email" placeholder="marie@email.com"></div>
+      <div class="field"><label>Téléphone</label><input type="tel" placeholder="06 00 00 00 00"></div>
+      <div class="field"><label>Message</label><textarea placeholder="Décrivez votre situation ou votre demande…"></textarea></div>
+      <button type="submit" class="submit-btn">Envoyer mon message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Sophie Pellegrin</div>
+  <ul class="footer-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#services">Accompagnements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <p>© 2025 · Sophrologue à Mougins (06)</p>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
+const io = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('in')), {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

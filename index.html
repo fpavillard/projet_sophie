@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sophie Pellegrin · Sophrologue — Choisir une version</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Lato',sans-serif;background:#0F0F0F;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem}
+header{text-align:center;margin-bottom:4rem}
+.pre{font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:#888;margin-bottom:1rem}
+h1{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:#fff;margin-bottom:.6rem}
+h1 em{font-style:italic;color:#C9A84C}
+header p{font-size:.95rem;color:#666;font-weight:300}
+.versions{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;width:100%}
+.v-card{background:#1A1A1A;border:1px solid #2A2A2A;border-radius:8px;overflow:hidden;text-decoration:none;transition:all .35s;display:flex;flex-direction:column}
+.v-card:hover{border-color:#444;transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.v-preview{height:200px;position:relative;overflow:hidden}
+.v1-bg{background:linear-gradient(155deg,#1E3A2F 0%,#2D5A3D 50%,#1A3028 100%)}
+.v2-bg{background:linear-gradient(135deg,#3A3060 0%,#5C4E8A 50%,#3A3060 100%)}
+.v3-bg{background:linear-gradient(135deg,#8C4A28 0%,#B8643A 50%,#8C4A28 100%)}
+.v-preview-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+.v-preview-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:rgba(255,255,255,.6);font-style:italic}
+.v-preview-tag{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.v-preview-accent{position:absolute;right:1.5rem;bottom:1.5rem;width:40px;height:40px;border-radius:50%;opacity:.6}
+.v1-accent{background:#C9A84C}
+.v2-accent{background:#D4A0B0}
+.v3-accent{background:#EDDACB}
+.v-body{padding:1.8rem;flex:1}
+.v-name{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#666;margin-bottom:.6rem}
+.v-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;margin-bottom:.6rem}
+.v-desc{font-size:.88rem;color:#888;line-height:1.7;font-weight:300}
+.v-palette{display:flex;gap:.4rem;margin-top:1.2rem}
+.swatch{width:20px;height:20px;border-radius:50%}
+.v-action{padding:1.2rem 1.8rem;border-top:1px solid #222;display:flex;justify-content:space-between;align-items:center}
+.v-action span{font-size:.78rem;color:#555;letter-spacing:.08em}
+.v-arrow{font-size:1.2rem;color:#444;transition:all .3s}
+.v-card:hover .v-arrow{color:#fff;transform:translateX(4px)}
+
+footer{margin-top:4rem;font-size:.78rem;color:#333}
+@media(max-width:800px){.versions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <p class="pre">Projet de refonte — Site Sophie Pellegrin</p>
+  <h1><em>3 propositions</em> de design</h1>
+  <p>Cliquez sur une version pour l'explorer en plein écran</p>
+</header>
+
+<div class="versions">
+  <a href="version1.html" class="v-card">
+    <div class="v-preview v1-bg">
+      <div class="v-preview-inner">
+        <div class="v-preview-title">Forêt</div>
+        <div class="v-preview-tag">Nature · Élégance · Sérénité</div>
+      </div>
+      <div class="v-preview-accent v1-accent"></div>
+    </div>
+    <div class="v-body">
+      <div class="v-name">Version 1</div>
+      <div class="v-title">Forêt & Sérénité</div>
+      <div class="v-desc">Palette végétale profonde — vert forêt, crème et or. Typographie Cormorant Garamond (serif élégant). Mise en page luxueuse avec effets hover dramatiques.</div>
+      <div class="v-palette">
+        <div class="swatch" style="background:#1E3A2F" title="Vert forêt"></div>
+        <div class="swatch" style="background:#4A7C59" title="Sauge"></div>
+        <div class="swatch" style="background:#F7F3EC" title="Crème"></div>
+        <div class="swatch" style="background:#C9A84C" title="Or"></div>
+      </div>
+    </div>
+    <div class="v-action">
+      <span>Explorer cette version</span>
+      <span class="v-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="version2.html" class="v-card">
+    <div class="v-preview v2-bg">
+      <div class="v-preview-inner">
+        <div class="v-preview-title">Lumière</div>
+        <div class="v-preview-tag">Moderne · Pro · Épuré</div>
+      </div>
+      <div class="v-preview-accent v2-accent"></div>
+    </div>
+    <div class="v-body">
+      <div class="v-name">Version 2</div>
+      <div class="v-title">Lumière & Modernité</div>
+      <div class="v-desc">Layout asymétrique en deux colonnes avec tons lavande et rose poudré. Typographie Raleway (moderne). Approche professionnelle et contemporaine, pills et badges.</div>
+      <div class="v-palette">
+        <div class="swatch" style="background:#5C4E8A" title="Prune"></div>
+        <div class="swatch" style="background:#8B7EC8" title="Lavande"></div>
+        <div class="swatch" style="background:#F2E8EC" title="Rose poudré"></div>
+        <div class="swatch" style="background:#E8D0D8" title="Blush"></div>
+      </div>
+    </div>
+    <div class="v-action">
+      <span>Explorer cette version</span>
+      <span class="v-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="version3.html" class="v-card">
+    <div class="v-preview v3-bg">
+      <div class="v-preview-inner">
+        <div class="v-preview-title">Chaleur</div>
+        <div class="v-preview-tag">Intime · Humain · Doux</div>
+      </div>
+      <div class="v-preview-accent v3-accent"></div>
+    </div>
+    <div class="v-body">
+      <div class="v-name">Version 3</div>
+      <div class="v-title">Chaleur & Bienveillance</div>
+      <div class="v-desc">Tons terracotta chauds, crème et rose doux. Typographie Playfair Display (romantique). Cartes arrondies, emojis, témoignages — approche la plus chaleureuse et personnelle.</div>
+      <div class="v-palette">
+        <div class="swatch" style="background:#B8643A" title="Terracotta"></div>
+        <div class="swatch" style="background:#D4895A" title="Ocre clair"></div>
+        <div class="swatch" style="background:#FBF7F2" title="Crème chaude"></div>
+        <div class="swatch" style="background:#EDDACB" title="Blush chaud"></div>
+      </div>
+    </div>
+    <div class="v-action">
+      <span>Explorer cette version</span>
+      <span class="v-arrow">→</span>
+    </div>
+  </a>
+</div>
+
+<footer>projet_sophie · 2025 · Frédéric Villard</footer>
+</body>
+</html>
