@@ -53,9 +53,40 @@ nav.scrolled{background:rgba(251,247,242,.97);backdrop-filter:blur(12px);box-sha
 .btn-terra:hover{background:var(--terra-dark);transform:translateY(-3px);box-shadow:0 15px 35px rgba(184,100,58,.35)}
 .btn-outline-terra{display:inline-block;padding:1.1rem 2.8rem;border:1.5px solid rgba(184,100,58,.4);color:var(--terra);text-decoration:none;font-size:.88rem;letter-spacing:.1em;font-weight:600;border-radius:50px;transition:all .3s}
 .btn-outline-terra:hover{border-color:var(--terra);background:rgba(184,100,58,.06)}
-.hero-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.3rem,2.4vw,2rem);color:var(--brown);line-height:1.6;margin-bottom:1.5rem;max-width:700px}
-.hero-quote p{margin-bottom:1rem}
-.hero-quote cite{display:block;font-style:normal;font-family:'Nunito',sans-serif;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:600}
+.hero-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.2rem,2.2vw,1.9rem);color:var(--brown);line-height:1.7;margin-bottom:1.5rem;max-width:720px;display:flex;flex-direction:column;align-items:center;gap:.15rem}
+.hero-quote cite{display:block;font-style:normal;font-family:'Nunito',sans-serif;font-size:.82rem;letter-spacing:.25em;text-transform:uppercase;color:var(--terra);font-weight:700;margin-top:.8rem}
+.q-line,.hero-quote cite{opacity:0}
+
+@keyframes swirl-left{
+  0%{opacity:0;transform:rotate(-18deg) translateX(-80px) scale(.75);filter:blur(8px)}
+  65%{transform:rotate(2deg) translateX(6px) scale(1.02);filter:blur(0)}
+  100%{opacity:1;transform:rotate(0) translateX(0) scale(1);filter:blur(0)}
+}
+@keyframes swirl-right{
+  0%{opacity:0;transform:rotate(18deg) translateX(80px) scale(.75);filter:blur(8px)}
+  65%{transform:rotate(-2deg) translateX(-6px) scale(1.02);filter:blur(0)}
+  100%{opacity:1;transform:rotate(0) translateX(0) scale(1);filter:blur(0)}
+}
+@keyframes swirl-up{
+  0%{opacity:0;transform:rotate(-10deg) translateY(50px) scale(.8);filter:blur(6px)}
+  65%{transform:rotate(1.5deg) translateY(-4px) scale(1.02);filter:blur(0)}
+  100%{opacity:1;transform:rotate(0) translateY(0) scale(1);filter:blur(0)}
+}
+@keyframes swirl-down{
+  0%{opacity:0;transform:rotate(12deg) translateY(-50px) scale(.8);filter:blur(6px)}
+  65%{transform:rotate(-1.5deg) translateY(4px) scale(1.02);filter:blur(0)}
+  100%{opacity:1;transform:rotate(0) translateY(0) scale(1);filter:blur(0)}
+}
+@keyframes fade-cite{
+  0%{opacity:0;transform:scaleX(.4) translateY(8px);letter-spacing:.6em}
+  100%{opacity:1;transform:scaleX(1) translateY(0);letter-spacing:.25em}
+}
+
+.hero-quote.animate .q-line-1{animation:swirl-left .9s cubic-bezier(.34,1.4,.64,1) .15s forwards}
+.hero-quote.animate .q-line-2{animation:swirl-right .9s cubic-bezier(.34,1.4,.64,1) .45s forwards}
+.hero-quote.animate .q-line-3{animation:swirl-up .9s cubic-bezier(.34,1.4,.64,1) .75s forwards}
+.hero-quote.animate .q-line-4{animation:swirl-down .9s cubic-bezier(.34,1.4,.64,1) 1.05s forwards}
+.hero-quote.animate cite{animation:fade-cite .7s ease 1.5s forwards}
 .hero-scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.6rem;color:var(--light-br);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
 .scroll-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);opacity:.4;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.3)}}
@@ -210,8 +241,11 @@ footer p{font-size:.78rem;color:rgba(255,255,255,.25)}
       <div class="badge-ornament"><span>✦</span></div>
       <span class="badge-sub">Sophrologue · Alpes-Maritimes</span>
     </div>
-    <blockquote class="hero-quote">
-      <p>«&nbsp;Le bonheur est constitué de cinq composantes&nbsp;: le bien-être spirituel, physique, intellectuel, relationnel et émotionnel.<br>Chacun de ces éléments est comme une couleur de l'arc-en-ciel.<br>Quand elles arrivent à être réunies, la lumière apparaît&nbsp;»</p>
+    <blockquote class="hero-quote" id="heroQuote">
+      <span class="q-line q-line-1">«&nbsp;Le bonheur est constitué de cinq composantes&nbsp;:</span>
+      <span class="q-line q-line-2">le bien-être spirituel, physique, intellectuel, relationnel et émotionnel.</span>
+      <span class="q-line q-line-3">Chacun de ces éléments est comme une couleur de l'arc-en-ciel.</span>
+      <span class="q-line q-line-4">Quand elles arrivent à être réunies, la lumière apparaît&nbsp;»</span>
       <cite>Tal Ben-Shahar</cite>
     </blockquote>
     <p class="hero-sub">Sophie Pellegrin · Hypnothérapeute · Coach de vie</p>
@@ -465,6 +499,19 @@ const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
 const io = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('shown')), {threshold:.08});
 document.querySelectorAll('.appear').forEach(el => io.observe(el));
+
+// Quote swirl — déclenche au chargement si visible, sinon au scroll
+const quote = document.getElementById('heroQuote');
+const quoteObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      quote.classList.remove('animate');
+      void quote.offsetWidth; // reset animation
+      quote.classList.add('animate');
+    }
+  });
+}, {threshold: .3});
+quoteObserver.observe(quote);
 </script>
 </body>
 </html>
