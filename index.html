@@ -8,125 +8,159 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Lato',sans-serif;background:#0F0F0F;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem}
-header{text-align:center;margin-bottom:4rem}
-.pre{font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:#888;margin-bottom:1rem}
-h1{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:#fff;margin-bottom:.6rem}
+body{font-family:'Lato',sans-serif;background:#0C0C0C;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;gap:4rem}
+header{text-align:center}
+.pre{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:#555;margin-bottom:1rem}
+h1{font-family:'Cormorant Garamond',serif;font-size:2.3rem;font-weight:300;color:#fff;margin-bottom:.5rem}
 h1 em{font-style:italic;color:#C9A84C}
-header p{font-size:.95rem;color:#666;font-weight:300}
-.versions{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;width:100%}
-.v-card{background:#1A1A1A;border:1px solid #2A2A2A;border-radius:8px;overflow:hidden;text-decoration:none;transition:all .35s;display:flex;flex-direction:column}
-.v-card:hover{border-color:#444;transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.5)}
-.v-preview{height:200px;position:relative;overflow:hidden}
-.v1-bg{background:linear-gradient(155deg,#1E3A2F 0%,#2D5A3D 50%,#1A3028 100%)}
-.v2-bg{background:linear-gradient(135deg,#3A3060 0%,#5C4E8A 50%,#3A3060 100%)}
-.v3-bg{background:linear-gradient(135deg,#8C4A28 0%,#B8643A 50%,#8C4A28 100%)}
-.v-preview-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
-.v-preview-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:rgba(255,255,255,.6);font-style:italic}
-.v-preview-tag{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3)}
-.v-preview-accent{position:absolute;right:1.5rem;bottom:1.5rem;width:40px;height:40px;border-radius:50%;opacity:.6}
-.v1-accent{background:#C9A84C}
-.v2-accent{background:#D4A0B0}
-.v3-accent{background:#EDDACB}
-.v-body{padding:1.8rem;flex:1}
-.v-name{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#666;margin-bottom:.6rem}
-.v-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;margin-bottom:.6rem}
-.v-desc{font-size:.88rem;color:#888;line-height:1.7;font-weight:300}
-.v-palette{display:flex;gap:.4rem;margin-top:1.2rem}
-.swatch{width:20px;height:20px;border-radius:50%}
-.v-action{padding:1.2rem 1.8rem;border-top:1px solid #222;display:flex;justify-content:space-between;align-items:center}
-.v-action span{font-size:.78rem;color:#555;letter-spacing:.08em}
-.v-arrow{font-size:1.2rem;color:#444;transition:all .3s}
-.v-card:hover .v-arrow{color:#fff;transform:translateX(4px)}
+header p{font-size:.9rem;color:#444;font-weight:300}
 
-footer{margin-top:4rem;font-size:.78rem;color:#333}
-@media(max-width:800px){.versions{grid-template-columns:1fr}}
+.section-label{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:#555;margin-bottom:1.5rem;padding-left:2px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:1100px;width:100%}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;max-width:800px;width:100%}
+
+.v-card{background:#181818;border:1px solid #242424;border-radius:10px;overflow:hidden;text-decoration:none;transition:all .3s;display:flex;flex-direction:column}
+.v-card:hover{border-color:#444;transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.v-preview{height:160px;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem}
+.bg-v1{background:linear-gradient(155deg,#1E3A2F,#2D5A3D,#1A3028)}
+.bg-v2{background:linear-gradient(135deg,#3A3060,#5C4E8A,#3A3060)}
+.bg-v3{background:linear-gradient(135deg,#8C4A28,#B8643A,#8C4A28)}
+.bg-v4{background:linear-gradient(135deg,#6BA88C,#8EC4A0,#6BA88C)}
+.bg-v5{background:linear-gradient(135deg,#C4795A,#EAB898,#D4895A)}
+.v-prev-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:rgba(255,255,255,.55);font-style:italic}
+.v-prev-tag{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.25)}
+.v-badge{position:absolute;top:.8rem;right:.8rem;padding:.25rem .6rem;border-radius:30px;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.badge-kept{background:rgba(100,180,120,.15);color:#7DCC95;border:1px solid rgba(100,180,120,.3)}
+.badge-new{background:rgba(201,168,76,.12);color:#C9A84C;border:1px solid rgba(201,168,76,.25)}
+.v-body{padding:1.4rem 1.6rem;flex:1}
+.v-num{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#555;margin-bottom:.4rem}
+.v-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#fff;margin-bottom:.4rem}
+.v-desc{font-size:.82rem;color:#666;line-height:1.65;font-weight:300}
+.v-palette{display:flex;gap:.35rem;margin-top:1rem}
+.sw{width:16px;height:16px;border-radius:50%}
+.v-footer{padding:.9rem 1.6rem;border-top:1px solid #1E1E1E;display:flex;justify-content:space-between;align-items:center}
+.v-footer span{font-size:.74rem;color:#444}
+.v-arr{font-size:1.1rem;color:#333;transition:all .3s}
+.v-card:hover .v-arr{color:#fff;transform:translateX(3px)}
+
+.seo-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(90,170,120,.1);border:1px solid rgba(90,170,120,.2);border-radius:6px;padding:.3rem .8rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#7DCC95;margin-left:.8rem;font-weight:600}
+.seo-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#7DCC95}
+
+footer{font-size:.75rem;color:#2A2A2A}
+@media(max-width:900px){.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+
 <header>
   <p class="pre">Projet de refonte — Site Sophie Pellegrin</p>
-  <h1><em>3 propositions</em> de design</h1>
+  <h1>5 <em>propositions</em> de design</h1>
   <p>Cliquez sur une version pour l'explorer en plein écran</p>
 </header>
 
-<div class="versions">
-  <a href="version1.html" class="v-card">
-    <div class="v-preview v1-bg">
-      <div class="v-preview-inner">
-        <div class="v-preview-title">Forêt</div>
-        <div class="v-preview-tag">Nature · Élégance · Sérénité</div>
+<div style="width:100%;max-width:1100px">
+  <p class="section-label">Versions conservées</p>
+  <div class="grid-3">
+    <a href="version2.html" class="v-card">
+      <div class="v-preview bg-v2">
+        <span class="v-badge badge-kept">Gardée ✓</span>
+        <div class="v-prev-title">Lumière</div>
+        <div class="v-prev-tag">Moderne · Pro · Épuré</div>
       </div>
-      <div class="v-preview-accent v1-accent"></div>
-    </div>
-    <div class="v-body">
-      <div class="v-name">Version 1</div>
-      <div class="v-title">Forêt & Sérénité</div>
-      <div class="v-desc">Palette végétale profonde — vert forêt, crème et or. Typographie Cormorant Garamond (serif élégant). Mise en page luxueuse avec effets hover dramatiques.</div>
-      <div class="v-palette">
-        <div class="swatch" style="background:#1E3A2F" title="Vert forêt"></div>
-        <div class="swatch" style="background:#4A7C59" title="Sauge"></div>
-        <div class="swatch" style="background:#F7F3EC" title="Crème"></div>
-        <div class="swatch" style="background:#C9A84C" title="Or"></div>
+      <div class="v-body">
+        <div class="v-num">Version 2</div>
+        <div class="v-title">Lumière & Modernité</div>
+        <div class="v-desc">Hero split 50/50, lavande et rose poudré. Raleway moderne. Stats bar, timeline, badges. La plus professionnelle.</div>
+        <div class="v-palette">
+          <div class="sw" style="background:#5C4E8A"></div>
+          <div class="sw" style="background:#8B7EC8"></div>
+          <div class="sw" style="background:#F2E8EC"></div>
+          <div class="sw" style="background:#E8D0D8"></div>
+        </div>
       </div>
-    </div>
-    <div class="v-action">
-      <span>Explorer cette version</span>
-      <span class="v-arrow">→</span>
-    </div>
-  </a>
+      <div class="v-footer"><span>Explorer</span><span class="v-arr">→</span></div>
+    </a>
 
-  <a href="version2.html" class="v-card">
-    <div class="v-preview v2-bg">
-      <div class="v-preview-inner">
-        <div class="v-preview-title">Lumière</div>
-        <div class="v-preview-tag">Moderne · Pro · Épuré</div>
+    <a href="version3.html" class="v-card">
+      <div class="v-preview bg-v3">
+        <span class="v-badge badge-kept">Gardée ✓</span>
+        <div class="v-prev-title">Chaleur</div>
+        <div class="v-prev-tag">Intime · Humain · Doux</div>
       </div>
-      <div class="v-preview-accent v2-accent"></div>
-    </div>
-    <div class="v-body">
-      <div class="v-name">Version 2</div>
-      <div class="v-title">Lumière & Modernité</div>
-      <div class="v-desc">Layout asymétrique en deux colonnes avec tons lavande et rose poudré. Typographie Raleway (moderne). Approche professionnelle et contemporaine, pills et badges.</div>
-      <div class="v-palette">
-        <div class="swatch" style="background:#5C4E8A" title="Prune"></div>
-        <div class="swatch" style="background:#8B7EC8" title="Lavande"></div>
-        <div class="swatch" style="background:#F2E8EC" title="Rose poudré"></div>
-        <div class="swatch" style="background:#E8D0D8" title="Blush"></div>
+      <div class="v-body">
+        <div class="v-num">Version 3</div>
+        <div class="v-title">Chaleur & Bienveillance</div>
+        <div class="v-desc">Terracotta chaud, crème, rose doux. Playfair Display romantique. Cartes arrondies, témoignages, approche la plus chaleureuse.</div>
+        <div class="v-palette">
+          <div class="sw" style="background:#B8643A"></div>
+          <div class="sw" style="background:#D4895A"></div>
+          <div class="sw" style="background:#FBF7F2"></div>
+          <div class="sw" style="background:#EDDACB"></div>
+        </div>
       </div>
-    </div>
-    <div class="v-action">
-      <span>Explorer cette version</span>
-      <span class="v-arrow">→</span>
-    </div>
-  </a>
+      <div class="v-footer"><span>Explorer</span><span class="v-arr">→</span></div>
+    </a>
 
-  <a href="version3.html" class="v-card">
-    <div class="v-preview v3-bg">
-      <div class="v-preview-inner">
-        <div class="v-preview-title">Chaleur</div>
-        <div class="v-preview-tag">Intime · Humain · Doux</div>
+    <a href="version1.html" class="v-card" style="opacity:.5">
+      <div class="v-preview bg-v1">
+        <div class="v-prev-title">Forêt</div>
+        <div class="v-prev-tag">Non retenue</div>
       </div>
-      <div class="v-preview-accent v3-accent"></div>
-    </div>
-    <div class="v-body">
-      <div class="v-name">Version 3</div>
-      <div class="v-title">Chaleur & Bienveillance</div>
-      <div class="v-desc">Tons terracotta chauds, crème et rose doux. Typographie Playfair Display (romantique). Cartes arrondies, emojis, témoignages — approche la plus chaleureuse et personnelle.</div>
-      <div class="v-palette">
-        <div class="swatch" style="background:#B8643A" title="Terracotta"></div>
-        <div class="swatch" style="background:#D4895A" title="Ocre clair"></div>
-        <div class="swatch" style="background:#FBF7F2" title="Crème chaude"></div>
-        <div class="swatch" style="background:#EDDACB" title="Blush chaud"></div>
+      <div class="v-body">
+        <div class="v-num">Version 1 (non retenue)</div>
+        <div class="v-title">Forêt & Sérénité</div>
+        <div class="v-desc">Vert forêt, or, Cormorant Garamond. Layout luxueux.</div>
       </div>
-    </div>
-    <div class="v-action">
-      <span>Explorer cette version</span>
-      <span class="v-arrow">→</span>
-    </div>
-  </a>
+      <div class="v-footer"><span>Voir quand même</span><span class="v-arr">→</span></div>
+    </a>
+  </div>
 </div>
 
-<footer>projet_sophie · 2025 · Frédéric Villard</footer>
+<div style="width:100%;max-width:1100px">
+  <p class="section-label">Nouvelles versions <span class="seo-badge">SEO optimisé</span> <span style="font-size:.7rem;color:#555;margin-left:.5rem">· Couleurs pastel</span></p>
+  <div class="grid-2" style="max-width:740px">
+    <a href="version4.html" class="v-card">
+      <div class="v-preview bg-v4">
+        <span class="v-badge badge-new">Nouveau</span>
+        <div class="v-prev-title">Sauge</div>
+        <div class="v-prev-tag">Pastel · Naturel · Frais</div>
+      </div>
+      <div class="v-body">
+        <div class="v-num">Version 4 · SEO</div>
+        <div class="v-title">Vert Pâle & Menthe</div>
+        <div class="v-desc">Pastel sage et menthe. DM Serif Display + Inter. Schema JSON-LD, FAQ accordéon, zones géo, balises sémantiques complètes.</div>
+        <div class="v-palette">
+          <div class="sw" style="background:#8EC4A0"></div>
+          <div class="sw" style="background:#B8E4D4"></div>
+          <div class="sw" style="background:#EDD4C0"></div>
+          <div class="sw" style="background:#F4F9F5"></div>
+        </div>
+      </div>
+      <div class="v-footer"><span>Explorer</span><span class="v-arr">→</span></div>
+    </a>
+
+    <a href="version5.html" class="v-card">
+      <div class="v-preview bg-v5">
+        <span class="v-badge badge-new">Nouveau</span>
+        <div class="v-prev-title">Pêche</div>
+        <div class="v-prev-tag">Pastel · Doux · Lumineux</div>
+      </div>
+      <div class="v-body">
+        <div class="v-num">Version 5 · SEO</div>
+        <div class="v-title">Pêche & Lilas</div>
+        <div class="v-desc">Pastel pêche, lilas et bleu ciel. Libre Baskerville + Poppins. Schema JSON-LD, témoignages, FAQ, trust band, breadcrumbs structurés.</div>
+        <div class="v-palette">
+          <div class="sw" style="background:#F2C9B0"></div>
+          <div class="sw" style="background:#D8C8E8"></div>
+          <div class="sw" style="background:#C0D8F0"></div>
+          <div class="sw" style="background:#FDF9F6"></div>
+        </div>
+      </div>
+      <div class="v-footer"><span>Explorer</span><span class="v-arr">→</span></div>
+    </a>
+  </div>
+</div>
+
+<footer>projet_sophie · 2025 · Frédéric Villard · http://localhost:8081</footer>
 </body>
 </html>
