@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration · Sophie Pellegrin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --terra:#B8643A;--terra-dark:#8C4A28;--terra-light:#D4895A;
+  --blush:#EDDACB;--cream:#FBF7F0;
+  --sidebar:#1C1E2B;--sidebar-2:#252840;
+  --bg:#F5F6FA;--white:#fff;
+  --text:#1E1E2E;--mid:#6B7280;--border:#E5E7EB
+}
+html,body{height:100%}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+
+/* ── LOGIN ───────────────────────────────────────────────────── */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--terra-dark),var(--terra))}
+.login-card{background:#fff;border-radius:20px;padding:3rem;width:380px;box-shadow:0 30px 80px rgba(0,0,0,.2)}
+.login-logo{font-family:'Playfair Display',serif;font-style:italic;font-size:1.5rem;color:var(--text);text-align:center;margin-bottom:.3rem}
+.login-logo em{color:var(--terra)}
+.login-sub{text-align:center;font-size:.82rem;color:var(--mid);margin-bottom:2rem}
+.login-field{margin-bottom:1.2rem}
+.login-field label{display:block;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);font-weight:700;margin-bottom:.4rem}
+.login-field input{width:100%;padding:.9rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s}
+.login-field input:focus{border-color:var(--terra)}
+.login-btn{width:100%;padding:1rem;background:var(--terra);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:.5rem}
+.login-btn:hover{background:var(--terra-dark)}
+.login-error{background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:.7rem;font-size:.85rem;color:#c0392b;margin-bottom:1rem;display:none}
+.login-error.show{display:block}
+
+/* ── APP SHELL ───────────────────────────────────────────────── */
+#app{display:none;height:100vh;flex-direction:row}
+#app.visible{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--sidebar);flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto}
+.sb-brand{padding:1.8rem 1.5rem 1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-brand h1{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:#fff}
+.sb-brand p{font-size:.73rem;color:rgba(255,255,255,.35);margin-top:.2rem;letter-spacing:.06em}
+.sb-nav{padding:1rem 0;flex:1}
+.sb-section{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.2);padding:.6rem 1.5rem .3rem;font-weight:700}
+.sb-item{display:flex;align-items:center;gap:.8rem;padding:.75rem 1.5rem;font-size:.88rem;color:rgba(255,255,255,.55);cursor:pointer;transition:all .2s;text-decoration:none;border-left:3px solid transparent}
+.sb-item:hover{color:#fff;background:rgba(255,255,255,.05)}
+.sb-item.active{color:#fff;background:rgba(184,100,58,.15);border-left-color:var(--terra)}
+.sb-item .ico{font-size:1rem;width:20px;text-align:center}
+.sb-badge{margin-left:auto;background:var(--terra);color:#fff;border-radius:30px;padding:.1rem .5rem;font-size:.7rem;font-weight:700}
+.sb-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,.06)}
+.sb-logout{display:flex;align-items:center;gap:.6rem;font-size:.82rem;color:rgba(255,255,255,.3);cursor:pointer;transition:color .2s}
+.sb-logout:hover{color:rgba(255,255,255,.7)}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.top-bar{background:#fff;border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.page-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--text)}
+.top-date{font-size:.82rem;color:var(--mid)}
+.views{padding:2rem;flex:1}
+.view{display:none}.view.active{display:block}
+
+/* CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem}
+.stat-card{background:#fff;border-radius:12px;padding:1.5rem;border:1px solid var(--border);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--terra)}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--text);line-height:1;margin-bottom:.3rem}
+.stat-label{font-size:.78rem;color:var(--mid);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.stat-card.warn::before{background:#f59e0b}
+.stat-card.warn .stat-num{color:#d97706}
+.stat-card.ok::before{background:#10b981}
+
+/* PANELS */
+.panel-card{background:#fff;border-radius:12px;border:1px solid var(--border);margin-bottom:1.5rem}
+.panel-head{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-head h2{font-size:1rem;font-weight:700;color:var(--text)}
+.panel-body{padding:1.5rem}
+
+/* BADGE STATUS */
+.badge{display:inline-block;padding:.25rem .7rem;border-radius:30px;font-size:.73rem;font-weight:700;letter-spacing:.05em}
+.badge.pending{background:#fef3c7;color:#d97706}
+.badge.confirmed{background:#d1fae5;color:#059669}
+.badge.cancelled{background:#fee2e2;color:#dc2626}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);font-weight:700;padding:.7rem 1rem;text-align:left;border-bottom:2px solid var(--border);background:var(--bg)}
+.tbl td{padding:.9rem 1rem;border-bottom:1px solid var(--border);font-size:.88rem;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#fafafa}
+
+/* ACTION BTNS */
+.act-btn{padding:.35rem .8rem;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;border:1px solid;transition:all .2s;font-family:'Nunito',sans-serif}
+.act-confirm{background:#d1fae5;color:#059669;border-color:#6ee7b7}
+.act-confirm:hover{background:#059669;color:#fff}
+.act-cancel{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+.act-cancel:hover{background:#dc2626;color:#fff}
+.act-delete{background:var(--bg);color:var(--mid);border-color:var(--border)}
+.act-delete:hover{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+.act-edit{background:var(--cream);color:var(--terra);border-color:var(--blush)}
+.act-edit:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.ftab{padding:.5rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--mid);transition:all .2s}
+.ftab.active{background:var(--terra);color:#fff;border-color:var(--terra)}
+
+/* SEARCH */
+.search-bar{display:flex;gap:.8rem;margin-bottom:1.5rem}
+.search-input{flex:1;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.92rem;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--terra)}
+
+/* PATIENT CARD */
+.patient-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem}
+.patient-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:1.5rem;cursor:pointer;transition:all .2s}
+.patient-card:hover{border-color:var(--terra-light);box-shadow:0 4px 15px rgba(184,100,58,.1)}
+.p-avatar{width:44px;height:44px;border-radius:50%;background:var(--blush);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--terra);font-weight:700;margin-bottom:1rem}
+.p-name{font-weight:700;font-size:.95rem;color:var(--text);margin-bottom:.2rem}
+.p-email{font-size:.8rem;color:var(--mid)}
+.p-stats{display:flex;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.p-stat{font-size:.78rem;color:var(--mid)}<br>.p-stat strong{display:block;color:var(--text);font-size:.9rem}
+
+/* AVAILABILITY */
+.avail-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.8rem}
+.avail-day{background:#fff;border-radius:10px;border:1px solid var(--border);padding:.8rem}
+.avail-day h4{font-size:.78rem;font-weight:700;color:var(--text);text-transform:capitalize;margin-bottom:.6rem;text-align:center}
+.slot-toggle{display:block;width:100%;padding:.3rem;border:1px solid var(--border);border-radius:5px;font-size:.75rem;background:#fff;cursor:pointer;margin-bottom:.3rem;transition:all .2s;font-family:'Nunito',sans-serif;text-align:center;color:var(--mid)}
+.slot-toggle.on{background:var(--blush);border-color:var(--terra-light);color:var(--terra);font-weight:700}
+.add-slot-btn{width:100%;padding:.3rem;border:1px dashed var(--border);border-radius:5px;background:transparent;font-size:.75rem;color:var(--mid);cursor:pointer;font-family:'Nunito',sans-serif}
+
+/* iCAL */
+.ical-box{background:var(--sidebar);border-radius:12px;padding:2rem;color:#fff;margin-bottom:1.5rem}
+.ical-box h3{font-family:'Playfair Display',serif;font-style:italic;font-size:1.2rem;margin-bottom:.5rem}
+.ical-box p{font-size:.88rem;opacity:.65;margin-bottom:1.5rem}
+.ical-url-wrap{display:flex;gap:.8rem;align-items:center}
+.ical-url{flex:1;padding:.9rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;font-size:.82rem;color:rgba(255,255,255,.8);word-break:break-all;font-family:monospace}
+.copy-btn{padding:.8rem 1.2rem;background:var(--terra);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;white-space:nowrap;transition:background .2s}
+.copy-btn:hover{background:var(--terra-dark)}
+.ical-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem}
+.ical-step{background:#fff;border-radius:10px;padding:1.2rem}
+.ical-step h4{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.ical-step p{font-size:.8rem;color:var(--mid);line-height:1.7}
+.ical-step .num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--blush);line-height:1;margin-bottom:.5rem}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.2)}
+.modal-head{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-head h3{font-family:'Playfair Display',serif;font-size:1.15rem}
+.modal-close{width:30px;height:30px;border:none;background:var(--bg);border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;color:var(--mid)}
+.modal-body{padding:1.5rem}
+.m-field{margin-bottom:1rem}
+.m-field label{display:block;font-size:.73rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);font-weight:700;margin-bottom:.35rem}
+.m-field input,.m-field select,.m-field textarea{width:100%;padding:.75rem .9rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.92rem;outline:none;transition:border-color .2s}
+.m-field input:focus,.m-field select:focus,.m-field textarea:focus{border-color:var(--terra)}
+.m-field textarea{height:80px;resize:none}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:.8rem;justify-content:flex-end}
+.m-btn{padding:.7rem 1.4rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;border:1px solid;transition:all .2s}
+.m-save{background:var(--terra);color:#fff;border-color:var(--terra)}.m-save:hover{background:var(--terra-dark)}
+.m-cancel{background:#fff;color:var(--mid);border-color:var(--border)}.m-cancel:hover{background:var(--bg)}
+
+/* UTILS */
+.empty-state{text-align:center;padding:4rem 2rem;color:var(--mid)}
+.empty-state .ico{font-size:3rem;margin-bottom:1rem;opacity:.4}
+.empty-state p{font-size:.92rem}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--text);color:#fff;padding:.9rem 1.5rem;border-radius:10px;font-size:.88rem;font-weight:600;z-index:2000;transform:translateY(100px);transition:transform .3s;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.toast.show{transform:translateY(0)}
+.toast.ok{background:#059669}
+.toast.err{background:#dc2626}
+.loading-row td{text-align:center;color:var(--mid);padding:2rem;font-size:.88rem}
+
+@media(max-width:900px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .avail-grid{grid-template-columns:repeat(4,1fr)}
+  .ical-steps{grid-template-columns:1fr}
+  .sidebar{width:200px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">Sophie <em>Pellegrin</em></div>
+    <div class="login-sub">Espace administration</div>
+    <div class="login-error" id="login-err"></div>
+    <div class="login-field"><label>Mot de passe</label><input type="password" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"></div>
+    <button class="login-btn" onclick="login()">Se connecter</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sb-brand">
+      <h1>Sophie Pellegrin</h1>
+      <p>Administration</p>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">Gestion</div>
+      <div class="sb-item active" onclick="showView('dashboard')" data-view="dashboard"><span class="ico">📊</span> Tableau de bord</div>
+      <div class="sb-item" onclick="showView('appointments')" data-view="appointments"><span class="ico">📅</span> Rendez-vous <span class="sb-badge" id="pending-badge" style="display:none">0</span></div>
+      <div class="sb-item" onclick="showView('patients')" data-view="patients"><span class="ico">👥</span> Patients</div>
+      <div class="sb-section">Configuration</div>
+      <div class="sb-item" onclick="showView('availability')" data-view="availability"><span class="ico">⏰</span> Disponibilités</div>
+      <div class="sb-item" onclick="showView('ical')" data-view="ical"><span class="ico">📆</span> iCal Sync</div>
+      <div class="sb-item" onclick="showView('settings')" data-view="settings"><span class="ico">⚙️</span> Paramètres</div>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-logout" onclick="logout()">↩ Se déconnecter</div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="top-bar">
+      <div class="page-title" id="page-title">Tableau de bord</div>
+      <div class="top-date" id="top-date"></div>
+    </div>
+    <div class="views">
+
+      <!-- DASHBOARD -->
+      <div class="view active" id="view-dashboard">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-num" id="s-patients">–</div><div class="stat-label">Patients</div></div>
+          <div class="stat-card ok"><div class="stat-num" id="s-today">–</div><div class="stat-label">Aujourd'hui</div></div>
+          <div class="stat-card warn"><div class="stat-num" id="s-pending">–</div><div class="stat-label">En attente</div></div>
+          <div class="stat-card"><div class="stat-num" id="s-week">–</div><div class="stat-label">Cette semaine</div></div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-head"><h2>🕐 Demandes en attente de confirmation</h2></div>
+          <div class="panel-body"><div id="pending-list"></div></div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-head"><h2>📅 Prochains rendez-vous</h2></div>
+          <div class="panel-body"><div id="upcoming-list"></div></div>
+        </div>
+      </div>
+
+      <!-- APPOINTMENTS -->
+      <div class="view" id="view-appointments">
+        <div class="filter-tabs">
+          <div class="ftab active" onclick="filterAppts('all',this)">Tous</div>
+          <div class="ftab" onclick="filterAppts('today',this)">Aujourd'hui</div>
+          <div class="ftab" onclick="filterAppts('upcoming',this)">À venir</div>
+          <div class="ftab" onclick="filterAppts('pending',this)">En attente</div>
+          <div class="ftab" onclick="filterAppts('past',this)">Passés</div>
+        </div>
+        <div class="panel-card">
+          <table class="tbl">
+            <thead><tr>
+              <th>Date</th><th>Heure</th><th>Patient</th><th>Type</th><th>Statut</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="appts-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PATIENTS -->
+      <div class="view" id="view-patients">
+        <div class="search-bar">
+          <input class="search-input" id="patient-search" placeholder="🔍  Rechercher un patient par nom ou email…" oninput="filterPatients()">
+        </div>
+        <div class="patient-grid" id="patients-grid"></div>
+      </div>
+
+      <!-- AVAILABILITY -->
+      <div class="view" id="view-availability">
+        <div class="panel-card">
+          <div class="panel-head">
+            <h2>Planning hebdomadaire</h2>
+            <button class="act-btn act-edit" onclick="saveAvailability()">💾 Enregistrer</button>
+          </div>
+          <div class="panel-body">
+            <p style="font-size:.85rem;color:var(--mid);margin-bottom:1.5rem">Cliquez sur un créneau pour l'activer ou le désactiver. Les modifications s'appliquent immédiatement après enregistrement.</p>
+            <div class="avail-grid" id="avail-grid"></div>
+          </div>
+        </div>
+        <div class="panel-card">
+          <div class="panel-head"><h2>Dates bloquées</h2></div>
+          <div class="panel-body">
+            <div style="display:flex;gap:.8rem;margin-bottom:1rem;align-items:center">
+              <input type="date" id="block-date" style="padding:.6rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Nunito',sans-serif;outline:none">
+              <button class="act-btn act-edit" onclick="addBlockedDate()">+ Bloquer cette date</button>
+            </div>
+            <div id="blocked-dates-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- iCAL -->
+      <div class="view" id="view-ical">
+        <div class="ical-box">
+          <h3>Synchronisation iCalendar</h3>
+          <p>Abonnez-vous à ce lien depuis votre iPhone, Google Calendar ou Outlook pour recevoir automatiquement tous vos rendez-vous confirmés.</p>
+          <div class="ical-url-wrap">
+            <div class="ical-url" id="ical-url-text">Chargement…</div>
+            <button class="copy-btn" onclick="copyIcal()">📋 Copier</button>
+          </div>
+        </div>
+        <div class="ical-steps">
+          <div class="ical-step">
+            <div class="num">📱</div>
+            <h4>iPhone / iOS</h4>
+            <p>Réglages → Calendrier → Comptes → Ajouter un compte → Autre → Ajouter un cal. avec abonnement → Coller le lien</p>
+          </div>
+          <div class="ical-step">
+            <div class="num">📅</div>
+            <h4>Google Calendar</h4>
+            <p>Google Calendar → Autres agendas → ＋ → À partir d'une URL → Coller le lien → Ajouter un agenda</p>
+          </div>
+          <div class="ical-step">
+            <div class="num">💻</div>
+            <h4>Outlook / macOS</h4>
+            <p>Calendrier → Ajouter un agenda → S'abonner depuis le web → Coller le lien → Importer</p>
+          </div>
+        </div>
+        <div class="panel-card" style="margin-top:1.5rem">
+          <div class="panel-head"><h2>Télécharger le fichier .ics</h2></div>
+          <div class="panel-body">
+            <p style="font-size:.88rem;color:var(--mid);margin-bottom:1rem">Téléchargez un snapshot de vos rendez-vous confirmés pour l'importer manuellement.</p>
+            <a id="ical-download-link" class="act-btn act-edit" style="display:inline-block;text-decoration:none" target="_blank">⬇ Télécharger consultations.ics</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="view" id="view-settings">
+        <div class="panel-card" style="max-width:500px">
+          <div class="panel-head"><h2>🔒 Changer le mot de passe</h2></div>
+          <div class="panel-body">
+            <div class="m-field"><label>Nouveau mot de passe</label><input type="password" id="new-pw" placeholder="6 caractères minimum"></div>
+            <div class="m-field"><label>Confirmer</label><input type="password" id="confirm-pw" placeholder="Répétez le mot de passe"></div>
+            <button class="m-btn m-save" onclick="changePw()">Enregistrer le nouveau mot de passe</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL APPOINTMENT -->
+<div class="modal-bg" id="appt-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Détails du rendez-vous</h3>
+      <button class="modal-close" onclick="closeModal('appt-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="appt-modal-body"></div>
+    <div class="modal-footer">
+      <button class="m-btn m-cancel" onclick="closeModal('appt-modal')">Fermer</button>
+      <button class="m-btn m-save" id="appt-save-btn">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PATIENT -->
+<div class="modal-bg" id="patient-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="patient-modal-title">Fiche patient</h3>
+      <button class="modal-close" onclick="closeModal('patient-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="patient-modal-body"></div>
+    <div class="modal-footer">
+      <button class="m-btn m-cancel" onclick="closeModal('patient-modal')">Fermer</button>
+      <button class="m-btn m-save" id="patient-save-btn">Enregistrer notes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+let TOKEN = sessionStorage.getItem('admin_token') || '';
+let allAppts = [], allPatients = [], curAvail = {}, apptFilter = 'all';
+
+// ── AUTH ──────────────────────────────────────────────────────────────
+async function login() {
+  const pw  = document.getElementById('pw-input').value;
+  const err = document.getElementById('login-err');
+  const res = await fetch('/admin/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})}).then(r=>r.json()).catch(()=>({error:'Serveur inaccessible'}));
+  if (res.token) {
+    TOKEN = res.token;
+    sessionStorage.setItem('admin_token', TOKEN);
+    err.classList.remove('show');
+    startApp();
+  } else {
+    err.textContent = res.error; err.classList.add('show');
+  }
+}
+
+function logout() {
+  TOKEN = ''; sessionStorage.removeItem('admin_token');
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+function api(url, opts={}) {
+  return fetch(url, { ...opts, headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN, ...(opts.headers||{}) } }).then(async r => {
+    if (r.status===401) { logout(); return; }
+    return r.json();
+  });
+}
+
+// ── START ─────────────────────────────────────────────────────────────
+function startApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  document.getElementById('top-date').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  loadDashboard(); loadAppointments(); loadPatients(); loadAvailability(); loadIcalUrl();
+}
+
+// ── VIEWS ─────────────────────────────────────────────────────────────
+const titles = {dashboard:'Tableau de bord',appointments:'Rendez-vous',patients:'Patients',availability:'Disponibilités',ical:'iCal Sync',settings:'Paramètres'};
+function showView(v) {
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(x=>x.classList.remove('active'));
+  document.querySelector(`[data-view="${v}"]`).classList.add('active');
+  document.getElementById('page-title').textContent = titles[v];
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const stats = await api('/admin/api/stats');
+  if (!stats) return;
+  document.getElementById('s-patients').textContent = stats.totalPatients;
+  document.getElementById('s-today').textContent    = stats.todayAppts;
+  document.getElementById('s-pending').textContent  = stats.pendingRequests;
+  document.getElementById('s-week').textContent     = stats.weekAppts;
+  const badge = document.getElementById('pending-badge');
+  if (stats.pendingRequests > 0) { badge.textContent = stats.pendingRequests; badge.style.display='inline'; }
+  renderDashboardLists();
+}
+
+function renderDashboardLists() {
+  const today   = new Date().toISOString().split('T')[0];
+  const pending = allAppts.filter(a=>a.status==='en attente');
+  const upcoming= allAppts.filter(a=>a.date>=today&&a.status==='confirmé').slice(0,5);
+  document.getElementById('pending-list').innerHTML = pending.length
+    ? pending.map(a=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid var(--border)">
+        <div><strong>${a.firstName} ${a.lastName}</strong> · <span style="color:var(--mid);font-size:.88rem">${fmtDate(a.date)} à ${a.time} · ${a.type}</span></div>
+        <div style="display:flex;gap:.5rem">
+          <button class="act-btn act-confirm" onclick="updateStatus('${a.id}','confirmé')">✓ Confirmer</button>
+          <button class="act-btn act-cancel" onclick="updateStatus('${a.id}','annulé')">✗ Refuser</button>
+        </div></div>`).join('')
+    : '<div class="empty-state"><div class="ico">✅</div><p>Aucune demande en attente</p></div>';
+
+  document.getElementById('upcoming-list').innerHTML = upcoming.length
+    ? upcoming.map(a=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--border)">
+        <div><strong>${a.firstName} ${a.lastName}</strong> · <span style="color:var(--mid);font-size:.85rem">${fmtDate(a.date)} à ${a.time} · ${a.type}</span></div>
+        <span class="badge confirmed">Confirmé</span></div>`).join('')
+    : '<div class="empty-state"><div class="ico">📅</div><p>Aucun rendez-vous à venir</p></div>';
+}
+
+// ── APPOINTMENTS ──────────────────────────────────────────────────────
+async function loadAppointments() {
+  const data = await api('/admin/api/appointments');
+  if (!data) return;
+  allAppts = data;
+  renderAppointments();
+  renderDashboardLists();
+  loadDashboard();
+}
+
+function filterAppts(f, el) {
+  apptFilter = f;
+  document.querySelectorAll('.ftab').forEach(x=>x.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderAppointments();
+}
+
+function renderAppointments() {
+  const today = new Date().toISOString().split('T')[0];
+  const filters = {
+    all:      ()=>true,
+    today:    a=>a.date===today,
+    upcoming: a=>a.date>=today&&a.status!=='annulé',
+    pending:  a=>a.status==='en attente',
+    past:     a=>a.date<today
+  };
+  const list = allAppts.filter(filters[apptFilter]||filters.all);
+  const tbody = document.getElementById('appts-tbody');
+  if (!list.length) { tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--mid)">Aucun rendez-vous</td></tr>'; return; }
+  tbody.innerHTML = list.map(a=>`
+    <tr>
+      <td><strong>${fmtDate(a.date)}</strong></td>
+      <td>${a.time}</td>
+      <td><strong>${a.firstName} ${a.lastName}</strong><br><span style="font-size:.78rem;color:var(--mid)">${a.email}</span></td>
+      <td style="font-size:.82rem">${a.type}</td>
+      <td><span class="badge ${a.status==='confirmé'?'confirmed':a.status==='annulé'?'cancelled':'pending'}">${a.status}</span></td>
+      <td style="display:flex;gap:.4rem;flex-wrap:wrap">
+        ${a.status==='en attente'?`<button class="act-btn act-confirm" onclick="updateStatus('${a.id}','confirmé')">✓</button><button class="act-btn act-cancel" onclick="updateStatus('${a.id}','annulé')">✗</button>`:''}
+        <button class="act-btn act-edit" onclick="openApptModal('${a.id}')">✏️</button>
+        <button class="act-btn act-delete" onclick="deleteAppt('${a.id}')">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+async function updateStatus(id, status) {
+  await api(`/admin/api/appointments/${id}`, {method:'PUT',body:JSON.stringify({status})});
+  toast(`Rendez-vous ${status}`, 'ok');
+  await loadAppointments();
+}
+
+async function deleteAppt(id) {
+  if (!confirm('Supprimer ce rendez-vous ?')) return;
+  await api(`/admin/api/appointments/${id}`, {method:'DELETE'});
+  toast('Rendez-vous supprimé');
+  await loadAppointments();
+}
+
+function openApptModal(id) {
+  const a = allAppts.find(x=>x.id===id);
+  document.getElementById('appt-modal-body').innerHTML = `
+    <div class="m-field"><label>Statut</label><select id="m-status"><option value="en attente"${a.status==='en attente'?' selected':''}>En attente</option><option value="confirmé"${a.status==='confirmé'?' selected':''}>Confirmé</option><option value="annulé"${a.status==='annulé'?' selected':''}>Annulé</option></select></div>
+    <div class="m-field"><label>Type</label><input id="m-type" value="${a.type}"></div>
+    <div class="m-field"><label>Notes praticien</label><textarea id="m-notes">${a.notes||''}</textarea></div>
+    <div style="background:var(--bg);border-radius:8px;padding:1rem;font-size:.85rem;color:var(--mid)">
+      📅 ${fmtDate(a.date)} à ${a.time} · ${a.firstName} ${a.lastName} · ${a.email} · ${a.phone}
+    </div>`;
+  document.getElementById('appt-save-btn').onclick = async ()=>{
+    await api(`/admin/api/appointments/${id}`,{method:'PUT',body:JSON.stringify({status:document.getElementById('m-status').value,type:document.getElementById('m-type').value,notes:document.getElementById('m-notes').value})});
+    toast('Rendez-vous mis à jour','ok'); closeModal('appt-modal'); loadAppointments();
+  };
+  document.getElementById('appt-modal').classList.add('open');
+}
+
+// ── PATIENTS ──────────────────────────────────────────────────────────
+async function loadPatients() {
+  const data = await api('/admin/api/patients');
+  if (!data) return;
+  allPatients = data;
+  renderPatients(allPatients);
+}
+
+function filterPatients() {
+  const q = document.getElementById('patient-search').value.toLowerCase();
+  renderPatients(allPatients.filter(p=>(p.firstName+' '+p.lastName+p.email).toLowerCase().includes(q)));
+}
+
+function renderPatients(list) {
+  const grid = document.getElementById('patients-grid');
+  grid.innerHTML = list.length ? list.map(p=>`
+    <div class="patient-card" onclick="openPatientModal('${p.id}')">
+      <div class="p-avatar">${p.firstName[0]}${p.lastName[0]}</div>
+      <div class="p-name">${p.firstName} ${p.lastName}</div>
+      <div class="p-email">${p.email}</div>
+      ${p.phone?`<div class="p-email">${p.phone}</div>`:''}
+      <div class="p-stats">
+        <div class="p-stat"><strong>${p.totalAppts}</strong>RDV total</div>
+        <div class="p-stat"><strong>${p.lastVisit?fmtDate(p.lastVisit):'–'}</strong>Dernier RDV</div>
+      </div>
+    </div>`).join('')
+    : '<div class="empty-state" style="grid-column:1/-1"><div class="ico">👥</div><p>Aucun patient trouvé</p></div>';
+}
+
+function openPatientModal(id) {
+  const p = allPatients.find(x=>x.id===id);
+  document.getElementById('patient-modal-title').textContent = `${p.firstName} ${p.lastName}`;
+  document.getElementById('patient-modal-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.2rem">
+      <div class="m-field"><label>Prénom</label><input value="${p.firstName}" readonly style="background:var(--bg)"></div>
+      <div class="m-field"><label>Nom</label><input value="${p.lastName}" readonly style="background:var(--bg)"></div>
+      <div class="m-field"><label>Email</label><input value="${p.email}" readonly style="background:var(--bg)"></div>
+      <div class="m-field"><label>Téléphone</label><input value="${p.phone||''}" readonly style="background:var(--bg)"></div>
+    </div>
+    <div class="m-field"><label>Notes praticien</label><textarea id="p-notes">${p.notes||''}</textarea></div>
+    <div style="margin-top:1rem">
+      <div style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);font-weight:700;margin-bottom:.8rem">Historique (${p.history?.length||0} RDV)</div>
+      ${(p.history||[]).slice(0,5).map(a=>`<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.82rem">
+        <span>${fmtDate(a.date)} ${a.time} · ${a.type}</span>
+        <span class="badge ${a.status==='confirmé'?'confirmed':a.status==='annulé'?'cancelled':'pending'}">${a.status}</span>
+      </div>`).join('')||'<p style="font-size:.82rem;color:var(--mid)">Aucun historique</p>'}
+    </div>`;
+  document.getElementById('patient-save-btn').onclick = async ()=>{
+    await api(`/admin/api/patients/${id}`,{method:'PUT',body:JSON.stringify({notes:document.getElementById('p-notes').value})});
+    toast('Notes enregistrées','ok'); closeModal('patient-modal'); loadPatients();
+  };
+  document.getElementById('patient-modal').classList.add('open');
+}
+
+// ── AVAILABILITY ──────────────────────────────────────────────────────
+async function loadAvailability() {
+  const data = await api('/admin/api/availability');
+  if (!data) return;
+  curAvail = JSON.parse(JSON.stringify(data));
+  renderAvailGrid();
+  renderBlockedDates();
+}
+
+function renderAvailGrid() {
+  const days = ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+  const allSlots = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+  document.getElementById('avail-grid').innerHTML = days.map(day=>`
+    <div class="avail-day">
+      <h4>${day}</h4>
+      ${allSlots.map(s=>`<button class="slot-toggle${(curAvail.weekly[day]||[]).includes(s)?' on':''}" onclick="toggleSlot('${day}','${s}',this)">${s}</button>`).join('')}
+    </div>`).join('');
+}
+
+function toggleSlot(day, slot, btn) {
+  const slots = curAvail.weekly[day] || [];
+  const idx   = slots.indexOf(slot);
+  if (idx>=0) { slots.splice(idx,1); btn.classList.remove('on'); }
+  else         { slots.push(slot); slots.sort(); btn.classList.add('on'); }
+  curAvail.weekly[day] = slots;
+}
+
+async function saveAvailability() {
+  await api('/admin/api/availability',{method:'PUT',body:JSON.stringify(curAvail)});
+  toast('Disponibilités enregistrées','ok');
+}
+
+function renderBlockedDates() {
+  const list = document.getElementById('blocked-dates-list');
+  const dates = curAvail.blockedDates || [];
+  list.innerHTML = dates.length
+    ? dates.sort().map(d=>`<div style="display:inline-flex;align-items:center;gap:.5rem;background:var(--bg);border-radius:8px;padding:.4rem .8rem;margin:.3rem;font-size:.85rem">
+        ${fmtDate(d)} <button onclick="removeBlockedDate('${d}')" style="border:none;background:none;color:var(--mid);cursor:pointer;font-size:1rem;line-height:1">×</button></div>`).join('')
+    : '<p style="font-size:.85rem;color:var(--mid)">Aucune date bloquée</p>';
+}
+
+async function addBlockedDate() {
+  const d = document.getElementById('block-date').value;
+  if (!d || (curAvail.blockedDates||[]).includes(d)) return;
+  curAvail.blockedDates = [...(curAvail.blockedDates||[]), d];
+  await api('/admin/api/availability',{method:'PUT',body:JSON.stringify(curAvail)});
+  toast('Date bloquée','ok'); renderBlockedDates();
+}
+
+async function removeBlockedDate(d) {
+  curAvail.blockedDates = (curAvail.blockedDates||[]).filter(x=>x!==d);
+  await api('/admin/api/availability',{method:'PUT',body:JSON.stringify(curAvail)});
+  toast('Date débloquée'); renderBlockedDates();
+}
+
+// ── iCAL ──────────────────────────────────────────────────────────────
+async function loadIcalUrl() {
+  const data = await api('/admin/api/ical-url');
+  if (!data) return;
+  document.getElementById('ical-url-text').textContent = data.url;
+  document.getElementById('ical-download-link').href = data.url;
+}
+
+function copyIcal() {
+  const url = document.getElementById('ical-url-text').textContent;
+  navigator.clipboard.writeText(url).then(()=>toast('Lien copié !','ok'));
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────
+async function changePw() {
+  const p1 = document.getElementById('new-pw').value;
+  const p2 = document.getElementById('confirm-pw').value;
+  if (p1 !== p2) { toast('Les mots de passe ne correspondent pas','err'); return; }
+  const res = await api('/admin/api/change-password',{method:'POST',body:JSON.stringify({newPassword:p1})});
+  if (res?.success) { toast('Mot de passe modifié','ok'); document.getElementById('new-pw').value=''; document.getElementById('confirm-pw').value=''; }
+  else toast(res?.error||'Erreur','err');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────
+function fmtDate(ds) {
+  return new Date(ds+'T12:00').toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+}
+
+let toastTimer;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 3000);
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+
+// ── BOOT ──────────────────────────────────────────────────────────────
+if (TOKEN) startApp();
+</script>
+</body>
+</html>

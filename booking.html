@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réserver une consultation · Sophie Pellegrin Sophrologue</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --terra:#B8643A;--terra-dark:#8C4A28;--terra-light:#D4895A;
+  --blush:#EDDACB;--cream:#FBF7F0;--warm:#FFF8F2;
+  --brown:#3D2314;--mid:#7A5035;--light:#C4A88A;--border:rgba(184,100,58,.15)
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--warm);color:var(--brown);min-height:100vh}
+
+/* NAV */
+.top-nav{background:#fff;border-bottom:1px solid var(--border);padding:1rem 6vw;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+.nav-brand{font-family:'Playfair Display',serif;font-style:italic;font-size:1.2rem;color:var(--brown);text-decoration:none}
+.nav-brand em{color:var(--terra);font-style:italic}
+.nav-back{font-size:.82rem;color:var(--mid);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.nav-back:hover{color:var(--terra)}
+
+/* HERO BAND */
+.hero-band{background:linear-gradient(135deg,var(--terra-dark),var(--terra));padding:3rem 6vw;text-align:center;color:#fff}
+.hero-band h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:400;margin-bottom:.5rem}
+.hero-band h1 em{font-style:italic}
+.hero-band p{opacity:.8;font-size:.95rem;font-weight:300}
+
+/* LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:3rem 6vw 6rem;display:grid;grid-template-columns:1fr 380px;gap:3rem;align-items:start}
+
+/* STEPS indicator */
+.steps-bar{grid-column:1/-1;display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+.step-item{display:flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:600;color:var(--light);transition:color .3s}
+.step-item.active{color:var(--terra)}
+.step-item.done{color:var(--terra-light)}
+.step-num{width:28px;height:28px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.78rem;transition:background .3s}
+.step-item.done .step-num{background:var(--terra-light);border-color:var(--terra-light);color:#fff}
+.step-item.active .step-num{background:var(--terra);border-color:var(--terra);color:#fff}
+.step-sep{flex:1;height:1px;background:var(--blush)}
+
+/* CALENDAR PANEL */
+.panel{background:#fff;border-radius:16px;box-shadow:0 4px 30px rgba(61,35,20,.06);padding:2rem;border:1px solid var(--border)}
+.panel-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--brown);margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem}
+.panel-title::before{content:'';width:3px;height:1.2rem;background:var(--terra);border-radius:2px;display:block}
+
+/* Month nav */
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.month-label{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--brown);font-weight:600;text-transform:capitalize}
+.arrow-btn{width:32px;height:32px;border:1px solid var(--border);background:#fff;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mid);transition:all .2s}
+.arrow-btn:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
+
+/* Calendar grid */
+.cal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:.5rem}
+.cal-header span{text-align:center;font-size:.72rem;font-weight:700;color:var(--light);letter-spacing:.08em;text-transform:uppercase;padding:.3rem 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day{width:100%;aspect-ratio:1;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:500;cursor:default;background:transparent;color:var(--light);position:relative;transition:all .2s}
+.cal-day.available{background:var(--blush);color:var(--brown);cursor:pointer;font-weight:700}
+.cal-day.available:hover{background:var(--terra);color:#fff;transform:scale(1.08)}
+.cal-day.selected{background:var(--terra) !important;color:#fff !important}
+.cal-day.today{box-shadow:0 0 0 2px var(--terra-light)}
+.cal-day.past,.cal-day.empty{opacity:.25}
+
+/* Time slots */
+.slots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.slot-btn{padding:.6rem;border:1.5px solid var(--blush);background:#fff;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;color:var(--terra);cursor:pointer;transition:all .2s}
+.slot-btn:hover,.slot-btn.selected{background:var(--terra);border-color:var(--terra);color:#fff}
+
+/* BOOKING FORM */
+.form-section{display:none}
+.form-section.visible{display:block}
+.selected-recap{background:var(--blush);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:.9rem;color:var(--brown)}
+.selected-recap strong{font-weight:700;color:var(--terra)}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:.4rem;font-weight:700}
+.field input,.field select,.field textarea{width:100%;padding:.9rem 1rem;border:1.5px solid var(--blush);background:var(--warm);font-family:'Nunito',sans-serif;font-size:.95rem;color:var(--brown);border-radius:10px;outline:none;transition:all .3s;font-weight:400}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--terra-light);background:#fff;box-shadow:0 0 0 4px rgba(184,100,58,.08)}
+.field textarea{height:90px;resize:none}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.submit-btn{width:100%;padding:1.1rem;background:var(--terra);color:#fff;border:none;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;border-radius:10px;cursor:pointer;transition:all .3s;box-shadow:0 6px 20px rgba(184,100,58,.3);margin-top:.5rem}
+.submit-btn:hover{background:var(--terra-dark);transform:translateY(-2px)}
+.submit-btn:disabled{opacity:.5;cursor:wait;transform:none}
+
+/* SIDEBAR INFO */
+.sidebar{display:flex;flex-direction:column;gap:1.5rem}
+.info-card{background:#fff;border-radius:16px;padding:1.8rem;border:1px solid var(--border);box-shadow:0 4px 20px rgba(61,35,20,.04)}
+.info-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--brown);margin-bottom:1rem;font-style:italic}
+.info-row{display:flex;gap:.8rem;align-items:flex-start;margin-bottom:.9rem;font-size:.88rem;color:var(--mid)}
+.info-row:last-child{margin-bottom:0}
+.info-ico{width:32px;height:32px;border-radius:8px;background:var(--blush);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.info-ico svg{width:15px;height:15px;stroke:var(--terra);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.type-chip{display:flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:8px;font-size:.82rem;font-weight:600;color:var(--terra);background:var(--blush);margin-bottom:.5rem;cursor:pointer;transition:all .2s;border:1.5px solid transparent}
+.type-chip:hover,.type-chip.active{background:var(--terra);color:#fff;border-color:var(--terra)}
+
+/* CONFIRMATION */
+.confirm-screen{display:none;text-align:center;padding:3rem 1rem}
+.confirm-screen.visible{display:block}
+.confirm-icon{width:80px;height:80px;border-radius:50%;background:rgba(184,100,58,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2.5rem}
+.confirm-screen h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--brown);margin-bottom:.8rem}
+.confirm-screen p{color:var(--mid);font-size:.95rem;font-weight:300;line-height:1.8;max-width:400px;margin:0 auto}
+.confirm-detail{background:var(--blush);border-radius:10px;padding:1.2rem;margin:1.5rem auto;max-width:360px;text-align:left}
+.confirm-detail p{font-size:.88rem;color:var(--brown);margin-bottom:.4rem}
+.confirm-detail strong{color:var(--terra)}
+.btn-new{display:inline-block;margin-top:1.5rem;padding:.9rem 2rem;background:var(--terra);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:.9rem;cursor:pointer;border:none;font-family:'Nunito',sans-serif}
+
+/* Loading */
+.loading{text-align:center;padding:2rem;color:var(--light);font-size:.9rem}
+.loading::after{content:'';display:inline-block;width:16px;height:16px;border:2px solid var(--blush);border-top-color:var(--terra);border-radius:50%;animation:spin .8s linear infinite;margin-left:.5rem;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Error */
+.error-msg{background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:.8rem 1rem;font-size:.88rem;color:#c0392b;margin-bottom:1rem;display:none}
+.error-msg.visible{display:block}
+
+@media(max-width:900px){
+  .main{grid-template-columns:1fr;padding:2rem 4vw 4rem}
+  .slots-grid{grid-template-columns:repeat(4,1fr)}
+  .field-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="version3.html" class="nav-brand">Sophie <em>Pellegrin</em></a>
+  <a href="version3.html" class="nav-back">← Retour au site</a>
+</nav>
+
+<div class="hero-band">
+  <h1>Réserver une <em>consultation</em></h1>
+  <p>Choisissez un créneau disponible · Réponse de confirmation sous 24h</p>
+</div>
+
+<div class="main">
+
+  <!-- STEPS -->
+  <div class="steps-bar">
+    <div class="step-item active" id="step1-ind"><div class="step-num">1</div><span>Date</span></div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="step2-ind"><div class="step-num">2</div><span>Horaire</span></div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="step3-ind"><div class="step-num">3</div><span>Vos informations</span></div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="step4-ind"><div class="step-num">4</div><span>Confirmation</span></div>
+  </div>
+
+  <!-- LEFT COLUMN -->
+  <div>
+
+    <!-- CALENDAR -->
+    <div class="panel" id="cal-panel">
+      <div class="panel-title">Choisissez une date</div>
+      <div class="month-nav">
+        <button class="arrow-btn" id="prev-month" onclick="changeMonth(-1)">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="month-label" id="month-label">Chargement…</div>
+        <button class="arrow-btn" id="next-month" onclick="changeMonth(1)">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="cal-header">
+        <span>Lu</span><span>Ma</span><span>Me</span><span>Je</span><span>Ve</span><span>Sa</span><span>Di</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"><div class="loading">Chargement</div></div>
+    </div>
+
+    <!-- TIME SLOTS (step 2) -->
+    <div class="panel" id="slots-panel" style="display:none;margin-top:1.5rem">
+      <div class="panel-title">Choisissez un horaire</div>
+      <div id="slots-date-label" style="font-size:.88rem;color:var(--mid);margin-bottom:1rem"></div>
+      <div class="slots-grid" id="slots-grid"></div>
+    </div>
+
+    <!-- FORM (step 3) -->
+    <div class="panel form-section" id="form-panel" style="margin-top:1.5rem">
+      <div class="panel-title">Vos informations</div>
+      <div class="selected-recap" id="booking-recap"></div>
+      <div class="error-msg" id="form-error"></div>
+      <form id="booking-form" onsubmit="submitBooking(event)">
+        <input type="hidden" id="sel-date" name="date">
+        <input type="hidden" id="sel-time" name="time">
+        <div class="field">
+          <label>Type de consultation</label>
+          <select name="type">
+            <option>Consultation sophrologie</option>
+            <option>Hypnose ericksonienne</option>
+            <option>Méditation & pleine conscience</option>
+            <option>EMDR · RITMO</option>
+            <option>Coaching de vie</option>
+            <option>Thérapies psycho-corporelles</option>
+            <option>Premier rendez-vous (découverte)</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Prénom *</label><input name="firstName" type="text" autocomplete="given-name" required placeholder="Marie"></div>
+          <div class="field"><label>Nom *</label><input name="lastName" type="text" autocomplete="family-name" required placeholder="Dupont"></div>
+        </div>
+        <div class="field"><label>Email *</label><input name="email" type="email" autocomplete="email" required placeholder="marie@email.com"></div>
+        <div class="field"><label>Téléphone</label><input name="phone" type="tel" autocomplete="tel" placeholder="06 00 00 00 00"></div>
+        <div class="field"><label>Motif / Message (optionnel)</label><textarea name="notes" placeholder="Décrivez brièvement votre situation ou vos attentes…"></textarea></div>
+        <button type="submit" class="submit-btn" id="submit-btn">Envoyer ma demande de rendez-vous</button>
+      </form>
+    </div>
+
+    <!-- CONFIRMATION (step 4) -->
+    <div class="panel confirm-screen" id="confirm-panel" style="margin-top:1.5rem">
+      <div class="confirm-icon">🌿</div>
+      <h2>Demande envoyée !</h2>
+      <p>Merci <strong id="conf-name"></strong>. Sophie Pellegrin vous contactera sous <strong>24h</strong> pour confirmer votre rendez-vous.</p>
+      <div class="confirm-detail" id="conf-detail"></div>
+      <button class="btn-new" onclick="resetBooking()">Faire une nouvelle réservation</button>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="info-card">
+      <h3>Informations pratiques</h3>
+      <div class="info-row">
+        <div class="info-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><strong style="display:block;color:var(--brown);margin-bottom:.1rem">Cabinet à Mougins</strong>Alpes-Maritimes (06) · Consultations en visio disponibles</div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div><strong style="display:block;color:var(--brown);margin-bottom:.1rem">Disponibilités</strong>Lundi – Vendredi · 9h – 19h</div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div><strong style="display:block;color:var(--brown);margin-bottom:.1rem">Contact direct</strong><a href="tel:+33662660108" style="color:var(--terra);font-weight:700">06 62 66 01 08</a></div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>Accompagnements proposés</h3>
+      <div class="type-chip">🌊 Sophrologie</div>
+      <div class="type-chip">🌀 Hypnose Ericksonienne</div>
+      <div class="type-chip">🍃 Méditation & Pleine Conscience</div>
+      <div class="type-chip">👁️ EMDR · RITMO</div>
+      <div class="type-chip">✨ Coaching de Vie</div>
+      <div class="type-chip">💫 Thérapies Psycho-corporelles</div>
+    </div>
+
+    <div class="info-card" style="background:var(--blush);border-color:var(--terra-light)">
+      <h3>Comment ça fonctionne ?</h3>
+      <div style="font-size:.88rem;color:var(--mid);line-height:1.8">
+        <p style="margin-bottom:.6rem"><strong style="color:var(--terra)">1.</strong> Choisissez une date et un horaire disponibles.</p>
+        <p style="margin-bottom:.6rem"><strong style="color:var(--terra)">2.</strong> Renseignez vos coordonnées et votre motif.</p>
+        <p style="margin-bottom:.6rem"><strong style="color:var(--terra)">3.</strong> Sophie vous contacte sous 24h pour confirmer.</p>
+        <p><strong style="color:var(--terra)">4.</strong> Votre rendez-vous est confirmé — à bientôt !</p>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+let curYear, curMonth, availability = {}, selDate = null, selTime = null;
+
+function init() {
+  const now = new Date();
+  curYear  = now.getFullYear();
+  curMonth = now.getMonth() + 1;
+  loadMonth();
+}
+
+async function loadMonth() {
+  document.getElementById('cal-grid').innerHTML = '<div class="loading">Chargement</div>';
+  const ym = `${curYear}-${String(curMonth).padStart(2,'0')}`;
+  document.getElementById('month-label').textContent = `${MONTHS_FR[curMonth-1]} ${curYear}`;
+  document.getElementById('prev-month').disabled = (curYear === new Date().getFullYear() && curMonth <= new Date().getMonth()+1);
+
+  try {
+    availability = await fetch(`/api/availability/${ym}`).then(r => r.json());
+    renderCalendar();
+  } catch {
+    document.getElementById('cal-grid').innerHTML = '<div style="color:#c0392b;font-size:.88rem">Erreur de connexion au serveur.</div>';
+  }
+}
+
+function renderCalendar() {
+  const grid   = document.getElementById('cal-grid');
+  const todayS = new Date().toISOString().split('T')[0];
+  const first  = new Date(curYear, curMonth-1, 1).getDay();
+  const days   = new Date(curYear, curMonth, 0).getDate();
+  const offset = first === 0 ? 6 : first - 1;
+  grid.innerHTML = '';
+
+  for (let i = 0; i < offset; i++) {
+    const e = document.createElement('button');
+    e.className = 'cal-day empty'; e.disabled = true; grid.appendChild(e);
+  }
+  for (let d = 1; d <= days; d++) {
+    const ds  = `${curYear}-${String(curMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const btn = document.createElement('button');
+    btn.textContent = d;
+    const avail = availability[ds]?.length > 0;
+    btn.className = 'cal-day' + (avail ? ' available' : ' past') + (ds === todayS ? ' today' : '') + (ds === selDate ? ' selected' : '');
+    btn.disabled  = !avail;
+    if (avail) btn.onclick = () => selectDate(ds);
+    grid.appendChild(btn);
+  }
+}
+
+function changeMonth(dir) {
+  curMonth += dir;
+  if (curMonth > 12) { curMonth = 1;  curYear++; }
+  if (curMonth < 1)  { curMonth = 12; curYear--; }
+  loadMonth();
+}
+
+function selectDate(ds) {
+  selDate = ds; selTime = null;
+  renderCalendar();
+  const panel = document.getElementById('slots-panel');
+  panel.style.display = 'block';
+  const label = new Date(ds + 'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('slots-date-label').textContent = label;
+  renderSlots(availability[ds]);
+  document.getElementById('form-panel').classList.remove('visible');
+  document.getElementById('form-panel').style.display = 'none';
+  setStep(2);
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function renderSlots(slots) {
+  const grid = document.getElementById('slots-grid');
+  grid.innerHTML = slots.map(s =>
+    `<button class="slot-btn${s===selTime?' selected':''}" onclick="selectSlot('${s}')">${s}</button>`
+  ).join('');
+}
+
+function selectSlot(time) {
+  selTime = time;
+  renderSlots(availability[selDate]);
+  const panel = document.getElementById('form-panel');
+  panel.style.display = 'block';
+  panel.classList.add('visible');
+  document.getElementById('sel-date').value = selDate;
+  document.getElementById('sel-time').value = time;
+  const label = new Date(selDate+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('booking-recap').innerHTML = `Rendez-vous : <strong>${label} à ${time}</strong>`;
+  setStep(3);
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+async function submitBooking(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const err = document.getElementById('form-error');
+  btn.disabled = true; btn.textContent = 'Envoi en cours…'; err.classList.remove('visible');
+
+  const form = new FormData(e.target);
+  const data = Object.fromEntries(form);
+
+  try {
+    const res = await fetch('/api/booking', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    if (json.success) {
+      showConfirmation(data);
+    } else {
+      err.textContent = json.error || 'Une erreur est survenue.';
+      err.classList.add('visible');
+      btn.disabled = false; btn.textContent = 'Envoyer ma demande de rendez-vous';
+    }
+  } catch {
+    err.textContent = 'Impossible de contacter le serveur. Veuillez réessayer.';
+    err.classList.add('visible');
+    btn.disabled = false; btn.textContent = 'Envoyer ma demande de rendez-vous';
+  }
+}
+
+function showConfirmation(data) {
+  const dateFr = new Date(data.date+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('conf-name').textContent = data.firstName;
+  document.getElementById('conf-detail').innerHTML = `
+    <p>📅 <strong>${dateFr} à ${data.time}</strong></p>
+    <p>🎯 <strong>${data.type}</strong></p>
+    <p>📧 Confirmation à <strong>${data.email}</strong></p>
+  `;
+  document.getElementById('cal-panel').style.display = 'none';
+  document.getElementById('slots-panel').style.display = 'none';
+  document.getElementById('form-panel').style.display = 'none';
+  const conf = document.getElementById('confirm-panel');
+  conf.style.display = 'block'; conf.classList.add('visible');
+  setStep(4);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetBooking() {
+  selDate = null; selTime = null;
+  document.getElementById('confirm-panel').style.display = 'none';
+  document.getElementById('confirm-panel').classList.remove('visible');
+  document.getElementById('cal-panel').style.display = 'block';
+  document.getElementById('slots-panel').style.display = 'none';
+  document.getElementById('form-panel').style.display = 'none';
+  document.getElementById('booking-form').reset();
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'Envoyer ma demande de rendez-vous';
+  loadMonth(); setStep(1);
+}
+
+function setStep(n) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById(`step${i}-ind`);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    else if (i === n) el.classList.add('active');
+  });
+}
+
+init();
+</script>
+</body>
+</html>
